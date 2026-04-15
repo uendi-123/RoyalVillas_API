@@ -1,0 +1,16 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RoyalVillas_API.Models.DTO
+{
+    public class UserDTO
+    {
+
+        public int Id { get; set; }
+
+        public string Email { get; set; } = default!;
+       
+        public string Name { get; set; }= default!;
+
+        public string Role { get; set; } = default!;
+    }
+}

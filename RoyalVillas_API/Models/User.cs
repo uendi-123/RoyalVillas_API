@@ -10,7 +10,7 @@ namespace RoyalVillas_API.Models
         [EmailAddress]
         public required string Email { get; set; }
         [Required]
-        [MaxLength(20)]
+        [MaxLength(100)]
         public required string Name { get; set; }
         [Required]
         public required string Password { get; set; }
