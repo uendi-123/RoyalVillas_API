@@ -26,7 +26,7 @@ namespace RoyalVillas_API.Services
         {
             return await _db.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());
         }
-        public async Task<LoginResponseDTO?> LoginAsync(LoginRequestDTO loginRequestDTO)
+        async Task<LoginResponseDTO?> IAuthService.LoginAsync(LoginRequestDTO loginRequestDTO)
         {
             try
             {
@@ -36,10 +36,11 @@ namespace RoyalVillas_API.Services
                     return null;
                 }
                 //generate token
+                var token = GenerateJwtToken(user);
                 return new LoginResponseDTO
                 {
                     UserDTO = _mapper.Map<UserDTO>(user),
-                    Token = ""
+                    Token = token
                 };
             }
             catch (Exception ex)
@@ -79,7 +80,9 @@ namespace RoyalVillas_API.Services
         private string GenerateJwtToken(User user)
         {
             var key=Encoding.ASCII.GetBytes(_configuration.GetSection("JwtSettings")["Secret"]);
+
             var tokenDescriptor = new SecurityTokenDescriptor
+
             {
                 Subject = new ClaimsIdentity(new[]
                 {
