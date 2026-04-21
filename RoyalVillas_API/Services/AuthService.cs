@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RoyalVillas_API.Data;
 using RoyalVillas_API.Models;
-using RoyalVillas_API.Models.DTO;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using RoyalVillaDTO;
 
 namespace RoyalVillas_API.Services
 {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RoyalVillaDTO;
 using RoyalVillas_API.Data;
-using RoyalVillas_API.Models.DTO;
 using RoyalVillas_API.Services;
 
 namespace RoyalVillas_API.Controllers

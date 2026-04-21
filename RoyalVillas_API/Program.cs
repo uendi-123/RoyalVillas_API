@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using RoyalVillas_API.Data;
-using RoyalVillas_API.Models.DTO;
 using RoyalVillas_API.Models;
 using RoyalVillas_API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using System.Text;
 using Microsoft.OpenApi;
+using RoyalVillaDTO;
 
 var builder = WebApplication.CreateBuilder(args);
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtSettings")["Secret"]);
