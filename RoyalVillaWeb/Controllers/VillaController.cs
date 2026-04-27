@@ -108,6 +108,50 @@ namespace RoyalVillaWeb.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["error"] = "Invalid Villa ID";
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id, "");
+                if (response != null && response.Sucess && response.Data != null)
+                {
+                    return View(_mapper.Map<VillaUpdateDTO>(response.Data));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred: {ex.Message}";
+            }
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(VillaUpdateDTO updateDTO)
+        {
+
+            try
+            {
+                var response = await _villaService.UpdateAsync<ApiResponse<object>>(updateDTO, "");
+                if (response != null && response.Sucess && response.Data != null)
+                {
+                    TempData["success"] = "Villa updated successfully";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred: {ex.Message}";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }
