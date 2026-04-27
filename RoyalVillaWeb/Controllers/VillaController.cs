@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RoyalVillaDTO;
 using RoyalVillaWeb.Models;
@@ -38,8 +39,75 @@ namespace RoyalVillaWeb.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(VillaCreateDTO createDTO)
+        {
+            if (!ModelState.IsValid) 
+            {
+                return View(createDTO);
+            }
+            try
+            {
+                var response = await _villaService.CreateAsync<ApiResponse<VillaDTO>>(createDTO,"");
+                if (response != null && response.Sucess && response.Data != null)
+                {
+                    TempData["success"] = "Villa created successfully";
+                    return RedirectToAction(nameof(Index));
+                }
 
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred: {ex.Message}";
+            }
 
+            return View(createDTO);
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id<=0) 
+            {
+                TempData["error"] = "Invalid Villa ID";
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id, "");
+                if (response != null && response.Sucess && response.Data != null)
+                {
+                    return View(response.Data);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred: {ex.Message}";
+            }
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(VillaDTO villaDTO)
+        {
+           
+            try
+            {
+                var response = await _villaService.DeleteAsync<ApiResponse<object>>(villaDTO.Id, "");
+                if (response != null && response.Sucess && response.Data != null)
+                {
+                    TempData["success"] = "Villa deleted successfully";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred: {ex.Message}";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }
