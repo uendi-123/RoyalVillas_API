@@ -1,9 +1,11 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoyalVillaDTO;
 using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services.IServices;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace RoyalVillaWeb.Controllers
 {

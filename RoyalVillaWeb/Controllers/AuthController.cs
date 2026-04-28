@@ -4,6 +4,10 @@ using RoyalVillaDTO;
 using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services.IServices;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace RoyalVillaWeb.Controllers
 {
@@ -32,6 +36,17 @@ namespace RoyalVillaWeb.Controllers
                 if (response != null && response.Sucess && response.Data != null)
                 {
                     LoginResponseDTO model = response.Data;
+                    var handler = new JwtSecurityTokenHandler();
+                    var jwt=handler.ReadJwtToken(model.Token);
+
+                    var identity=new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim(ClaimTypes.Name,jwt.Claims.FirstOrDefault(u=>u.Type=="email").Value));
+
+                    identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+                    var principal=new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    return RedirectToAction("Index", "Home");
+
                 }
 
             }
