@@ -22,6 +22,7 @@ builder.Services.AddHttpClient("RoyalVillaApi",client=>
 });
 
 builder.Services.AddScoped<IVillaService, VillaService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
