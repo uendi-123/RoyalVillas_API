@@ -9,17 +9,21 @@ namespace RoyalVillaWeb.Services
     public class BaseService : IBaseService
     {
         public IHttpClientFactory _httpClient { get; set; }
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+
         private static readonly JsonSerializerOptions JSonOptions = new()
         {
             PropertyNameCaseInsensitive = true
         };
         public ApiResponse<object>  ResponseModel { get; set; }
 
-        public BaseService(IHttpClientFactory httpClient)
+        public BaseService(IHttpClientFactory httpClient, IHttpContextAccessor httpContextAccessor)
         {
             this.ResponseModel = new();
             
             _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<T?> SendAsync<T>(ApiRequest apiRequest)
@@ -33,6 +37,13 @@ namespace RoyalVillaWeb.Services
                     Method = GetHttpMethod(apiRequest.ApiType),
 
                 };
+
+                var token= _httpContextAccessor.HttpContext?.Session?.GetString(SD.SessionToken);
+                if (!String.IsNullOrEmpty(token))
+                {
+                    message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
                 if (apiRequest.Data != null)
                 {
                     message.Content = JsonContent.Create(apiRequest.Data, options: JSonOptions);

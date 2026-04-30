@@ -11,6 +11,6 @@ namespace RoyalVillaWeb
             PUT,
             DELETE
         }
-
+        public const string SessionToken = "JWTToken";
     }
 }

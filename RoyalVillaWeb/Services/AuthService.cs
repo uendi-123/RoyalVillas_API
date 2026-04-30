@@ -10,7 +10,8 @@ namespace RoyalVillaWeb.Services
     {
         private readonly string _villaUrl;
         private const string APIEndpoint = "/api/auth";
-        public AuthService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+        public AuthService(IHttpClientFactory httpClient, IConfiguration configuration,IHttpContextAccessor httpContextAccessor) 
+            : base(httpClient,httpContextAccessor)
         {
 
         }
